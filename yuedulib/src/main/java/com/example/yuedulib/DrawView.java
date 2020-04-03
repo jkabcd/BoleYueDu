@@ -37,7 +37,7 @@ public class DrawView extends View {
     private GradientDrawable mNextShadowLT;
     private int pages = 0;
     private DeRectionHelp.Derection firstderection = DeRectionHelp.Derection.NONE;
-    private DeRectionHelp.PAGETYPE firPAGETYPE = DeRectionHelp.PAGETYPE.COVER;
+    private DeRectionHelp.PAGETYPE firPAGETYPE = DeRectionHelp.PAGETYPE.BOOKCOVER;
     public DrawView.PageOPER getPageOPER() {
         return pageOPER;
     }
