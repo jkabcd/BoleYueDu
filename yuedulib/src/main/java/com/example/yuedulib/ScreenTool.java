@@ -5,7 +5,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 public class ScreenTool {
-    static int getScreenWidth(Context context){
+   public static int getScreenWidth(Context context){
         DisplayMetrics dm = new DisplayMetrics();
         WindowManager wm = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         if (wm != null) {
@@ -15,7 +15,7 @@ public class ScreenTool {
             return 0;
         }
     }
-    static int getScreenHeight(Context context){
+    public  static int getScreenHeight(Context context){
         DisplayMetrics dm = new DisplayMetrics();
         WindowManager wm = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         if (wm != null) {

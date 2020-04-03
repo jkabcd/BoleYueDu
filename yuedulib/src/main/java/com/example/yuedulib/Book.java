@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import java.util.List;
 
 public class Book {
-    enum BOOKTYPE{
+   public enum BOOKTYPE{
         PRE,CUR,NEXT,COVERCUR
     }
     String title;
