@@ -339,18 +339,20 @@ public void drawCover(Canvas canvas){
     /*仿真滑动动画*/
     public void colverBookStartAnimal(){
         if(firstderection== DeRectionHelp.Derection.LEFT){
-            if(uppoint.x>getScreenWidth()/2){
+            if(uppoint.x>getScreenWidth()/1.2){
                 scroller.startScroll((int)uppoint.x,(int)uppoint.y,(int)(getScreenWidth()-uppoint.x),(int)(ScreenTool.getScreenHeight(getContext())-uppoint.y),500);
+                handler.sendEmptyMessageDelayed(3,500);
             }else {
                 handler.sendEmptyMessageDelayed(2,500);
                 scroller.startScroll((int)uppoint.x,(int)uppoint.y, (int) -uppoint.x,(int)(ScreenTool.getScreenHeight(getContext())-uppoint.y),500);
             }
         }else if(firstderection== DeRectionHelp.Derection.RIGHT){
             if(uppoint.x>getScreenWidth()/2){
-                handler.sendEmptyMessageDelayed(1,500);
                 scroller.startScroll((int)uppoint.x,(int)uppoint.y,(int)(getScreenWidth()-uppoint.x),(int)(ScreenTool.getScreenHeight(getContext())-uppoint.y),500);
+                handler.sendEmptyMessageDelayed(1,500);
             }else {
                 scroller.startScroll((int)uppoint.x,(int)uppoint.y, (int) -uppoint.x,(int)(ScreenTool.getScreenHeight(getContext())-uppoint.y),500);
+                handler.sendEmptyMessageDelayed(3,500);
             }
         }else {
             firstderection= DeRectionHelp.Derection.NONE;
@@ -367,6 +369,7 @@ public void drawCover(Canvas canvas){
     public interface PageOPER{
      void  prePage();
      void nextPage();
+     void reflush();
     }
     public int getScreenWidth(){
         return ScreenTool.getScreenWidth(getContext());
@@ -381,6 +384,9 @@ public void drawCover(Canvas canvas){
                     break;
                 case 2:
                     pageOPER.nextPage();
+                    break;
+                case 3:
+                    pageOPER.reflush();
                     break;
             }
         }

@@ -1,1 +1,1 @@
-include ':app', ':yuedulib'
+include ':app', ':yuedulib', ':basemodel'

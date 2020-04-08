@@ -2,6 +2,7 @@ package com.example.boleyuedu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,17 +10,22 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.bole.basemodel.BaseActivity;
+import com.bole.basemodel.tools.RxBus;
 import com.example.yuedulib.Book;
 import com.example.yuedulib.DisplayUtil;
 import com.example.yuedulib.DrawView;
 import com.example.yuedulib.GetJsonDataUtil;
 import com.example.yuedulib.ScreenTool;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -28,7 +34,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements DrawView.PageOPER {
+public class MainActivity extends BaseActivity implements DrawView.PageOPER {
 
     private Paint paint;
     private int lianpand = 20;
@@ -63,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements DrawView.PageOPER
 
         size = paint.breakText("画布安徽科技手动阀画布安徽科技手动，画布安徽科,技手动阀画布布布布布布，，，，，，，，", true, dwidth-marginLeft-marginright, null);
 
-
-
         Observable.create(new ObservableOnSubscribe<Object>() {
 
             @Override
@@ -86,7 +90,12 @@ public class MainActivity extends AppCompatActivity implements DrawView.PageOPER
                 Log.e("","");
             }
         });
-
+        liftCycle(Observable.interval(0, 1, TimeUnit.SECONDS),ActivityEvent.STOP, new Consumer() {
+            @Override
+            public void accept(Object o) throws Exception {
+           Log.e("as","内容："+o);
+            }
+        });
 
     }
     public List<String> Dealdata (){
@@ -207,6 +216,12 @@ public class MainActivity extends AppCompatActivity implements DrawView.PageOPER
         currentbooks = deldate(undeldata);
         drawPages(currentpage, currentbooks);
     }
+
+    @Override
+    public void reflush() {
+        drawPages(currentpage, currentbooks);
+    }
+
     public Bitmap horverImage(Bitmap bitmap, boolean H, boolean V)
     {
         int bmpWidth = bitmap.getWidth();
