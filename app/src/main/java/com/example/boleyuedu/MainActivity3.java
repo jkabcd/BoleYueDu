@@ -35,6 +35,7 @@ public class MainActivity3 extends BaseActivity {
         setContentView(R.layout.activity_main3);
         tv_dfa = findViewById(R.id.tv_dfa);
         btn_c = findViewById(R.id.btn_c);
+        //
         receiveData(new Consumer<EventMsg>() {
             @Override
             public void accept(EventMsg eventMsg) throws Exception {
