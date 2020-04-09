@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bole.basemodel.BaseActivity;
 import com.bole.basemodel.bean.EventMsg;
 import com.bole.basemodel.bean.Msg;
+import com.bole.basemodel.bean.Response;
+import com.bole.basemodel.exception.ResponseTransformer;
 import com.bole.basemodel.net.NetWorkManager;
 import com.bole.basemodel.tools.RxBus;
 
+import io.reactivex.ObservableTransformer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -23,11 +27,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity3 extends BaseActivity {
     private Button btn_c;
+    private TextView tv_dfa;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+        tv_dfa = findViewById(R.id.tv_dfa);
         btn_c = findViewById(R.id.btn_c);
         receiveData(new Consumer<EventMsg>() {
             @Override
@@ -40,22 +46,15 @@ public class MainActivity3 extends BaseActivity {
         findViewById(R.id.btn_c).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                sendData(new EventMsg<String>(221,"传回去"));
-//                finish();
-
-
-//                Intent intent = new Intent(MainActivity3.this,MainActivity4.class);
-//                startActivity(intent);
                 getdata();
-
             }
         });
     }
 public void getdata(){
-    NetWorkManager.getRequest().getkefu().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Msg>() {
+    NetWorkManager.getRequest().getkefu().compose(ResponseTransformer.<Response<Msg>>handleResult()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Response<Msg>>() {
         @Override
-        public void accept(Msg s) throws Exception {
-            Log.e("d","d");
+        public void accept(Response<Msg> msgResponse) throws Exception {
+          Log.e("","");
         }
     });
 }

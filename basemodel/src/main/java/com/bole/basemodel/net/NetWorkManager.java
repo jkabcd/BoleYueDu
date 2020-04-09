@@ -63,17 +63,15 @@ public class NetWorkManager {
         String stpath="";
         File file ;
         if(ismoutd){
-            Log.e("bbb","文件可用");
             stpath=Environment.getExternalStorageDirectory().toString()+"/boleyuedu";
-            file= new File(stpath);
+            file= new File(stpath,"cache_responses_bole");
             if(!file.exists()){
                 file.mkdir();
             }
         }else {
-            Log.e("bbb","不文件可用");
             file =context.getCacheDir();
         }
-        return new Cache(file,10240*1024);
+        return new Cache(file,10240*1024*10);
     }
 
     private OkHttpClient.Builder okClinet(){
