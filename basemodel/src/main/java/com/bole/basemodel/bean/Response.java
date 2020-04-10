@@ -1,22 +1,17 @@
 package com.bole.basemodel.bean;
 
-public class Response<T> {
+public abstract class Response<T> {
 
-    private int ret; // 返回的code
+    private int code; // 返回的code
     private T data; // 具体的数据结果
     private String msg; // message 可用来返回接口的说明
 
-    public Response(int ret,  String msg) {
-        this.ret = ret;
-        this.msg = msg;
-    }
-
     public int getCode() {
-        return ret;
+        return code;
     }
 
     public void setCode(int code) {
-        this.ret = code;
+        this.code = code;
     }
 
     public T getData() {

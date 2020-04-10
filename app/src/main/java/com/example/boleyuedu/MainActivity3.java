@@ -1,11 +1,13 @@
 package com.example.boleyuedu;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.bole.basemodel.bean.Msg;
 import com.bole.basemodel.bean.Response;
 import com.bole.basemodel.exception.ResponseTransformer;
 import com.bole.basemodel.net.NetWorkManager;
+import com.bole.basemodel.tools.PermissionHelper;
 import com.bole.basemodel.tools.RxBus;
 
 import io.reactivex.ObservableTransformer;
@@ -35,7 +38,9 @@ public class MainActivity3 extends BaseActivity {
         setContentView(R.layout.activity_main3);
         tv_dfa = findViewById(R.id.tv_dfa);
         btn_c = findViewById(R.id.btn_c);
-        //
+        String permissions[] = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        PermissionHelper.getInstance().checkPermissions(permissions, MainActivity3.this);
         receiveData(new Consumer<EventMsg>() {
             @Override
             public void accept(EventMsg eventMsg) throws Exception {
@@ -52,12 +57,18 @@ public class MainActivity3 extends BaseActivity {
         });
     }
 public void getdata(){
-    NetWorkManager.getRequest().getkefu().compose(ResponseTransformer.<Response<Msg>>handleResult()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Response<Msg>>() {
+    sendHttpData(NetWorkManager.getRequest().getkefu(), Msg.class, new Consumer<Msg>() {
         @Override
-        public void accept(Response<Msg> msgResponse) throws Exception {
-          Log.e("","");
+        public void accept(Msg msg) throws Exception {
+            Toast.makeText(MainActivity3.this,msg.getMsg(),Toast.LENGTH_SHORT).show();
         }
     });
+//    NetWorkManager.getRequest().getkefu().compose(ResponseTransformer.handleResult(Msg.class)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Msg>() {
+//        @Override
+//        public void accept(Msg msg) throws Exception {
+//        Log.e("","");
+//        }
+//    });
 }
     @Override
     protected void onDestroy() {

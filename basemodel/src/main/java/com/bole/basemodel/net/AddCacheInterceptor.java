@@ -43,12 +43,7 @@ public class AddCacheInterceptor implements Interceptor {
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
             if (mNetworkInfo != null) {
-
-                //这种方法也可以
-                //return mNetworkInfo .getState()== NetworkInfo.State.CONNECTED
-
                 return mNetworkInfo.isAvailable();
-
             }
         }
         return false;

@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bole.basemodel.bean.EventMsg;
+import com.bole.basemodel.bean.Msg;
+import com.bole.basemodel.exception.ResponseTransformer;
 import com.bole.basemodel.tools.RxBus;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
@@ -80,10 +82,7 @@ public abstract class BaseActivity  extends AppCompatActivity implements Lifecyc
         lifecycleSubject.onNext(ActivityEvent.STOP);
         super.onStop();
     }
-    public <T,R> void  liftCycle(Observable observable, ActivityEvent composer, Consumer consumer){
-        observable.subscribeOn(Schedulers.io()).compose(bindUntilEvent(composer)).observeOn(AndroidSchedulers.mainThread()).subscribe(consumer);
-    }
-
+  
     @Override
     @CallSuper
     protected void onDestroy() {
@@ -101,5 +100,8 @@ public abstract class BaseActivity  extends AppCompatActivity implements Lifecyc
                 AndroidSchedulers.mainThread(),
                 AndroidSchedulers.mainThread(),
                 consumer);
+  }
+  public <T>void sendHttpData(Observable observable,Class<T> clas,Consumer<T> consumer){
+        observable.compose(ResponseTransformer.handleResult(clas)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(consumer);
   }
 }

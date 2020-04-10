@@ -1,5 +1,6 @@
 package com.bole.basemodel.exception;
 
+import com.bole.basemodel.bean.Response;
 import com.google.gson.JsonParseException;
 
 import org.json.JSONException;
@@ -30,26 +31,21 @@ public class CustomException {
      */
     public static final int HTTP_ERROR = 1003;
 
-    public static ApiException handleException(Throwable e) {
-        ApiException ex;
+    public static int handleException(Throwable e) {
         if (e instanceof JsonParseException
                 || e instanceof JSONException
                 || e instanceof ParseException) {
             //解析错误
-            ex = new ApiException(PARSE_ERROR, e.getMessage());
-            return ex;
+            return PARSE_ERROR;
         } else if (e instanceof ConnectException) {
             //网络错误
-            ex = new ApiException(NETWORK_ERROR, e.getMessage());
-            return ex;
+            return NETWORK_ERROR;
         } else if (e instanceof UnknownHostException || e instanceof SocketTimeoutException) {
             //连接错误
-            ex = new ApiException(NETWORK_ERROR, e.getMessage());
-            return ex;
+            return NETWORK_ERROR;
         } else {
             //未知错误
-            ex = new ApiException(UNKNOWN, e.getMessage());
-            return ex;
+            return UNKNOWN;
         }
     }
 }

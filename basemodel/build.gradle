@@ -46,7 +46,7 @@ dependencies {
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
 
-
+    implementation 'com.lovedise:permissiongen:0.0.6'
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.2'

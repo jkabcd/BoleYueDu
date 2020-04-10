@@ -3,13 +3,9 @@ package com.bole.basemodel.net;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
-
 import com.bole.basemodel.BaseApplication;
-import com.bole.basemodel.BuildConfig;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -71,19 +67,28 @@ public class NetWorkManager {
         }else {
             file =context.getCacheDir();
         }
-        return new Cache(file,10240*1024*10);
+        Cache cache = null;
+        try{
+           cache =  new Cache(file,10*1024*1024);
+        }catch (Exception ex){
+            Log.e("","");
+        }
+        return cache;
     }
 
     private OkHttpClient.Builder okClinet(){
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        okHttpClient
-                .addInterceptor(loggingInterceptor)
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okHttpClient.addInterceptor(loggingInterceptor)
                 .addInterceptor(new AddHeadInterceptor())
+                .addInterceptor(new offLineCacheInterceptor())
                 .addNetworkInterceptor(new AddCacheInterceptor())
                 .cache(provideCache(BaseApplication.getApplicationConent()))
                 .connectTimeout(30, TimeUnit.SECONDS).readTimeout(30,TimeUnit.SECONDS).build();
         return okHttpClient;
     }
+
+
+
 }

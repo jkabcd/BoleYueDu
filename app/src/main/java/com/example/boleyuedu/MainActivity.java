@@ -90,12 +90,6 @@ public class MainActivity extends BaseActivity implements DrawView.PageOPER {
                 Log.e("","");
             }
         });
-        liftCycle(Observable.interval(0, 1, TimeUnit.SECONDS),ActivityEvent.STOP, new Consumer() {
-            @Override
-            public void accept(Object o) throws Exception {
-           Log.e("as","内容："+o);
-            }
-        });
 
     }
     public List<String> Dealdata (){
