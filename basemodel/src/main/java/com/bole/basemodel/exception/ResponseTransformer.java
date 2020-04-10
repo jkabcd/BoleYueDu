@@ -29,7 +29,7 @@ public class ResponseTransformer<T> {
                             responseData.setCode(CustomException.handleException(throwable));
                             responseData.setMsg(throwable.getMessage());
                         }catch (Exception e){
-                            Log.e("ResponseTransformer","ResponseTransformer实例化出错"+e.getMessage());
+                            Log.e("ResponseTransforme","ResponseTransformer实例化出错"+e.getMessage());
                         }
                         return (T)responseData;
                     }
