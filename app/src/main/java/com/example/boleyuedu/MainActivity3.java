@@ -1,34 +1,24 @@
 package com.example.boleyuedu;
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bole.basemodel.BaseActivity;
 import com.bole.basemodel.bean.EventMsg;
 import com.bole.basemodel.bean.Msg;
-import com.bole.basemodel.bean.Response;
-import com.bole.basemodel.exception.ResponseTransformer;
+import com.bole.basemodel.mvpBase.BasePresenter;
 import com.bole.basemodel.net.NetWorkManager;
 import com.bole.basemodel.tools.PermissionHelper;
-import com.bole.basemodel.tools.RxBus;
 
-import io.reactivex.ObservableTransformer;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity3 extends BaseActivity {
+public class MainActivity3 extends BaseActivity{
     private Button btn_c;
     private TextView tv_dfa;
 
@@ -63,12 +53,7 @@ public void getdata(){
             Toast.makeText(MainActivity3.this,msg.getMsg(),Toast.LENGTH_SHORT).show();
         }
     });
-//    NetWorkManager.getRequest().getkefu().compose(ResponseTransformer.handleResult(Msg.class)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Msg>() {
-//        @Override
-//        public void accept(Msg msg) throws Exception {
-//        Log.e("","");
-//        }
-//    });
+
 }
     @Override
     protected void onDestroy() {

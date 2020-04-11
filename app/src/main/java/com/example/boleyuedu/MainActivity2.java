@@ -38,6 +38,7 @@ public class MainActivity2 extends BaseActivity {
             public void onClick(View view) {
                 sendData(new EventMsg<String>(111,"传到2"));
                 startActivity(new Intent(MainActivity2.this,MainActivity3.class));
+
             }
         });
     }

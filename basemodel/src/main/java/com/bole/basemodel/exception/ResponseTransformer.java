@@ -23,7 +23,7 @@ public class ResponseTransformer<T> {
                     public T apply(Throwable throwable) throws Exception {
                         T newCreatedDate;
                         Response<T> responseData = null;
-                        try { 
+                        try {
                             newCreatedDate = tClass.newInstance();
                             responseData  = (Response<T>)newCreatedDate;
                             responseData.setCode(CustomException.handleException(throwable));
