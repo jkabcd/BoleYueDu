@@ -22,7 +22,7 @@ public class RxBus2 {
     private static volatile RxBus2 mInstance;
 
     /**
-     * 默认 bus ;
+     * 默认 bus;
      */
 
     private Subject<Object> _mBus;
