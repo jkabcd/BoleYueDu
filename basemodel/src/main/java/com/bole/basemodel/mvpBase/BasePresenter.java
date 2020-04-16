@@ -15,10 +15,11 @@ import java.lang.reflect.ParameterizedType;
  * **************************************
  */
 public  class BasePresenter<V ,M extends BaseModels> implements IPresenter {
-    V mvpView;
-    M mvpModel;
+   public V mvpView;
+   public M mvpModel;
     public  void setMvpView(V v){
         this.mvpView = v;
+        setMvpModel();
     }
     public void setMvpModel(){
                 try {
@@ -31,6 +32,18 @@ public  class BasePresenter<V ,M extends BaseModels> implements IPresenter {
             e.printStackTrace();
         }
     }
-
+    /**
+     * @description 解除绑定内存释放
+     * @param
+     * @return
+     * @author Administrator
+     * @time 2020/4/13 10:44
+     */
+    public void onDetachMvpView(){
+        if(mvpModel!=null)
+        mvpModel.clearHttps();
+        mvpModel = null;
+        mvpView = null;
+    }
 
 }

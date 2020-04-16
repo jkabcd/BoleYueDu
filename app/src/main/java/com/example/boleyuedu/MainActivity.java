@@ -1,8 +1,5 @@
 package com.example.boleyuedu;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,22 +7,19 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import com.bole.basemodel.BaseActivity;
-import com.bole.basemodel.tools.RxBus;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.yuedulib.Book;
 import com.example.yuedulib.DisplayUtil;
 import com.example.yuedulib.DrawView;
 import com.example.yuedulib.GetJsonDataUtil;
 import com.example.yuedulib.ScreenTool;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -34,7 +28,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity implements DrawView.PageOPER {
+public class MainActivity extends AppCompatActivity implements DrawView.PageOPER {
 
     private Paint paint;
     private int lianpand = 20;

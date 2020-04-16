@@ -1,17 +1,13 @@
 package com.bole.basemodel.net;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 
 import com.bole.basemodel.BaseApplication;
 
-import java.io.File;
 import java.io.IOException;
 
-import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 

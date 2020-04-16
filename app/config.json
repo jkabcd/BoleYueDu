@@ -1,0 +1,44 @@
+{
+
+  "defaultExtraInfo": {
+    "key2": "20161213",
+    "key": "20161212"
+  },
+  "channelInfoList": [
+    {
+      "channel": "meituan",
+      "alias": "美团",
+      "extraInfo": {
+        "buildtime": "20161212",
+        "hash": "123"
+      }
+    },
+    {
+      "channel": "360cn",
+      "alias": "360导航",
+      "extraInfo": {
+        "key": "20161213"
+      }
+    },
+    {
+      "channel": "googleplay"
+    },
+    {
+      "channel": "xiaomi"
+    },
+    {
+      "channel": "meizu"
+    },
+    {
+      "channel": "wandoujia",
+      "excludeDefaultExtraInfo": true
+    },
+    {
+      "channel": "myapp",
+      "excludeDefaultExtraInfo": true,
+      "extraInfo": {
+        "key": "20161212"
+      }
+    }
+  ]
+}

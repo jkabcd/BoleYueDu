@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.bole.basemodel.net.NetWorkManager;
-import com.squareup.leakcanary.LeakCanary;
 
 public class BaseApplication extends Application {
     private static Context content;
@@ -12,10 +11,10 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         this.content = this;
-        if(LeakCanary.isInAnalyzerProcess(this)){
-            return;
-        }
-        LeakCanary.install(this);//内存泄漏检测
+//        if(LeakCanary.isInAnalyzerProcess(this)){
+//            return;
+//        }
+//        LeakCanary.install(this);//内存泄漏检测
         NetWorkManager.getInstance().init();//初始化网络
 
    }

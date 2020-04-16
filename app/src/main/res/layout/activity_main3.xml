@@ -9,7 +9,12 @@
         android:layout_height="wrap_content" />
     <Button
         android:layout_width="match_parent"
-        android:text="第三个界面"
+        android:text="第三个界面11111111111111111111"
         android:id="@+id/btn_c"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:id="@+id/fra_se"
+        android:layout_height="match_parent"></LinearLayout>
 </LinearLayout>

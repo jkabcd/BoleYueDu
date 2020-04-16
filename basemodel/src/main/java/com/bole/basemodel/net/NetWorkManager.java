@@ -3,7 +3,9 @@ package com.bole.basemodel.net;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
 import com.bole.basemodel.BaseApplication;
+
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;

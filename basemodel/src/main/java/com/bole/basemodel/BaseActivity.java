@@ -21,18 +21,25 @@ import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import java.lang.reflect.ParameterizedType;
 
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
+import rx.subscriptions.CompositeSubscription;
 
-public abstract class BaseActivity<I,P extends BasePresenter>  extends AppCompatActivity implements LifecycleProvider<ActivityEvent>, IBaseView<P>{
-    private Disposable disposable;
+public abstract class BaseActivity<P extends BasePresenter>  extends AppCompatActivity implements LifecycleProvider<ActivityEvent>{
+    private Disposable transmitdisposable;
+//    private CompositeSubscription mCompositeSubscription;//如果不想用LifeCycle控制直接用这个类控制
+//    this.mCompositeSubscription = new CompositeSubscription();
+//     this.mCompositeSubscription.add(s);
+//     this.mCompositeSubscription.unsubscribe();
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();//生命周期管理类
-    protected P presenter;
-    protected I Iview;
+    protected P mvppresenter;
+
+
     @Override
     @NonNull
     @CheckResult
@@ -58,9 +65,13 @@ public abstract class BaseActivity<I,P extends BasePresenter>  extends AppCompat
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getlayoutId());
+        ButterKnife.bind(this);
+        initView();
+        initData();
         lifecycleSubject.onNext(ActivityEvent.CREATE);
-        Iview = (I) this;
         setPresenterAndView();
+        Log.e("","");
     }
 
     @Override
@@ -96,7 +107,12 @@ public abstract class BaseActivity<I,P extends BasePresenter>  extends AppCompat
     protected void onDestroy() {
         lifecycleSubject.onNext(ActivityEvent.DESTROY);
         if(RxBus.getInstance().isObserver()){
-            RxBus.getInstance().unregister(disposable);
+            RxBus.getInstance().unregister(transmitdisposable);
+        }
+        if(mvppresenter!=null){
+            mvppresenter.onDetachMvpView();
+        }else {
+            Log.e("da","mvppresenter为空");
         }
         super.onDestroy();
     }
@@ -104,7 +120,7 @@ public abstract class BaseActivity<I,P extends BasePresenter>  extends AppCompat
   * @description 发送数据
   * @param eventMsg 
   * @return
-  * @author Administrator
+  * @author Administratorv
   * @time 2020/4/10 17:50
   */
     public void sendData(EventMsg eventMsg){
@@ -118,11 +134,11 @@ public abstract class BaseActivity<I,P extends BasePresenter>  extends AppCompat
      * @time 2020/4/10 17:50
      */
     public void receiveData(Consumer<EventMsg> consumer){
-      disposable =  RxBus.getInstance().toObservable(EventMsg.class,
+        transmitdisposable =  RxBus.getInstance().toObservable(EventMsg.class,
                 AndroidSchedulers.mainThread(),
                 AndroidSchedulers.mainThread(),
                 consumer);
-  }
+    }
     /**
      * @description 网络请求
      * @param
@@ -131,7 +147,7 @@ public abstract class BaseActivity<I,P extends BasePresenter>  extends AppCompat
      * @time 2020/4/10 17:49
      */
   public <T>void sendHttpData(Observable observable,Class<T> clas,Consumer<T> consumer){
-        observable.compose(ResponseTransformer.handleResult(clas)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(consumer);
+        observable.compose(ResponseTransformer.handleResult(clas)).compose(bindToLifecycle()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(consumer);
   }
 
 
@@ -147,11 +163,14 @@ public abstract class BaseActivity<I,P extends BasePresenter>  extends AppCompat
         try {
             ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
             Class<P> clazz = (Class<P>) pt.getActualTypeArguments()[0];
-            presenter = clazz.newInstance();
-            presenter.setMvpView(Iview);
+            mvppresenter = clazz.newInstance();
+            mvppresenter.setMvpView(this);
         } catch (Exception e) {
             Log.e("BaseActivity","P请继承BasePresent,否则无法实例化");
             e.printStackTrace();
         }
     }
+    public abstract int getlayoutId();
+    public abstract void initView();
+    public abstract void initData();
 }

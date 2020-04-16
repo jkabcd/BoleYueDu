@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'walle'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
@@ -9,13 +10,95 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        flavorDimensions "versionCodexiaomi"
+    }
+
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+            InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream();
+            properties.load(inputStream)
+            def  keydir  = properties.getProperty('keystory.path')
+            def  password =properties.getProperty('keystory.password')
+            def  alias =properties.getProperty('keystory.alias')
+            def  alias_password =properties.getProperty('keystory.alias_password')
+            storeFile file(keydir)
+            storePassword password
+            keyAlias alias
+            keyPassword alias_password
+        }
+    }
+    productFlavors{
+        xiaomi{
+            dimension "versionCodexiaomi"
+            applicationId='com.example.xiaomi'
+            // 动态添加 string.xml 字段；
+            // 注意，这里是添加，在 string.xml 不能有这个字段，会重名！！！
+            resValue "string", "app_name", "dev_xiaomi"
+            signingConfig signingConfigs.release
+            // 动态修改 常量 字段
+            buildConfigField "String", "ENVIRONMENT", '"dev"'
+            // 修改 AndroidManifest.xml 里渠道变量
+            manifestPlaceholders= [ENVIRONMENTD: "devd",app_name:"小米",app_icon:"@mipmap/ic_launcher_round"]
+        }
+
+        googlec{
+            dimension "versionCodexiaomi"
+            applicationId='com.example.googlew'
+            resValue "string", "app_name", "dev_googlec"
+            signingConfig signingConfigs.release
+            buildConfigField "String", "ENVIRONMENT", '"prod"'
+            manifestPlaceholders= [ENVIRONMENTD: "prod",app_name:"谷歌",app_icon:"@mipmap/ic_launcher"]
+        }
+        hauwei{
+            dimension "versionCodexiaomi"
+            applicationId='com.example.hauwei'
+            resValue "string", "app_name", "dev_hauwei"
+            signingConfig signingConfigs.release
+            buildConfigField "String", "ENVIRONMENT", '"stage"'
+            manifestPlaceholders= [ENVIRONMENTD: "stage",app_name:"华为",app_icon:"@mipmap/ic_launcher"]
+        }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            debuggable = false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            debuggable = true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    android.applicationVariants.all{ variant->
+            variant.outputs.all{
+             def date = new Date().format("yyyyMMdd",TimeZone.getTimeZone("GMT+08"))
+                if(variant.buildType.name.equals('debug')){
+                    outputFileName = "boleyuedu_${applicationId}_debug_${date}_${versionName}.apk"
+                }
+                if(variant.buildType.name.equals('release')){
+                    outputFileName = "boleyuedu_${applicationId}_release_${date}_${versionName}.apk"
+                }
+            }
+    }
+
+    walle {
+        // 指定渠道包的输出路径
+        apkOutputFolder = new File("${project.buildDir}/outputs/channels");
+        // 定制渠道包的APK的文件名称
+        apkFileNameFormat = '${appName}-${packageName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}.apk';
+        // 渠道配置文件
+        channelFile = new File("${project.getProjectDir()}/channel")
+        configFile = new File("${project.getProjectDir()}/config.json")
     }
 }
 
@@ -31,6 +114,12 @@ dependencies {
     implementation'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.2' //Android中使用的库，内部引用了基础库，如果使用此库则无需再引用基础库
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2' //Android组件库，里面定义了例如RxActivity、RxFragment等Android组件，内部引用了基础库和Android库，如果使用此库则无需再重复引用
+
+    implementation 'com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2'
+    implementation 'com.meituan.android.walle:library:1.1.6'//美团瓦力打包
+
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
     implementation project(path: ':yuedulib')
     implementation project(path: ':basemodel')
 
